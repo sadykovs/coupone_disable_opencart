@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Купон не применяется, если товар по акции</name>
+    <code>no_coup_app_if_p_spec</code>
+    <version>1.0</version>
+    <author>ocdev</author>
+    <link>ocdev.ru</link>
+    <file path="catalog/model/extension/total/coupon.php">	
+	
+	  <operation>
+            <search><![CDATA[
+				if ($coupon_info) {
+			]]></search>
+			<add position="after" index="1"><![CDATA[
+				$this->load->model('catalog/product');
+			]]></add>
+        </operation>
+		<operation>
+            <search><![CDATA[
+				$discount = 0;
+			]]></search>
+			<add position="before" index="1"><![CDATA[
+				// Don't discount if product is on special
+			$results = $this->model_catalog_product->getProduct($product['product_id']);
+			if ($results['special']) {
+				continue;
+			}
+			]]></add>
+        </operation>
+    </file>
+</modification>
